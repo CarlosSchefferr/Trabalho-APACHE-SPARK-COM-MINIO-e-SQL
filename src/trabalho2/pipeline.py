@@ -7,7 +7,8 @@ from delta.tables import DeltaTable
 from .settings import Settings
 
 JDBC_DRIVER = "org.postgresql.Driver"
-DEMO_CUSTOMER_INSERT = (999, "Novo Cliente", "Curitiba", "active")
+DEMO_CUSTOMER_ID = 999
+DEMO_CUSTOMER_INSERT = (DEMO_CUSTOMER_ID, "Novo Cliente", "Curitiba", "active")
 DEMO_CUSTOMER_UPDATE_CONDITION = "id = 1"
 DEMO_CUSTOMER_DELETE_CONDITION = "id = 2"
 TABLES_QUERY = """
@@ -136,7 +137,7 @@ def replay_bronze_customer_dml(spark, settings: Settings) -> dict[str, str]:
     delta_table.delete(DEMO_CUSTOMER_DELETE_CONDITION)
 
     return {
-        "insert": f"id = {DEMO_CUSTOMER_INSERT[0]}",
+        "insert": f"id = {DEMO_CUSTOMER_ID}",
         "update": DEMO_CUSTOMER_UPDATE_CONDITION,
         "delete": DEMO_CUSTOMER_DELETE_CONDITION,
     }
