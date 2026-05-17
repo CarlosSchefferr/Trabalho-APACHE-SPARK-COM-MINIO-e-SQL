@@ -7,6 +7,9 @@ from delta.tables import DeltaTable
 from .settings import Settings
 
 JDBC_DRIVER = "org.postgresql.Driver"
+DEMO_CUSTOMER_INSERT = (999, "Novo Cliente", "Curitiba", "active")
+DEMO_CUSTOMER_UPDATE_CONDITION = "id = 1"
+DEMO_CUSTOMER_DELETE_CONDITION = "id = 2"
 TABLES_QUERY = """
 SELECT table_name
 FROM information_schema.tables
@@ -116,25 +119,26 @@ def convert_landing_to_delta(spark, settings: Settings) -> list[str]:
 
 
 def replay_bronze_customer_dml(spark, settings: Settings) -> dict[str, str]:
+    """Apply a fixed insert/update/delete demonstration on the Bronze customers Delta table."""
     bronze_path = f"s3a://{settings.bronze_bucket}/customers"
     schema = "id INT, name STRING, city STRING, status STRING"
     delta_table = DeltaTable.forPath(spark, bronze_path)
 
     spark.createDataFrame(
-        [(999, "Novo Cliente", "Curitiba", "active")],
+        [DEMO_CUSTOMER_INSERT],
         schema=schema,
     ).write.format("delta").mode("append").save(bronze_path)
 
     delta_table.update(
-        condition="id = 1",
+        condition=DEMO_CUSTOMER_UPDATE_CONDITION,
         set={"city": "'Porto Alegre'", "status": "'vip'"},
     )
-    delta_table.delete("id = 2")
+    delta_table.delete(DEMO_CUSTOMER_DELETE_CONDITION)
 
     return {
-        "insert": "id = 999",
-        "update": "id = 1",
-        "delete": "id = 2",
+        "insert": f"id = {DEMO_CUSTOMER_INSERT[0]}",
+        "update": DEMO_CUSTOMER_UPDATE_CONDITION,
+        "delete": DEMO_CUSTOMER_DELETE_CONDITION,
     }
 
 
