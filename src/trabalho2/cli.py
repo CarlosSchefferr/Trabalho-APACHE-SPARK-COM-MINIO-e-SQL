@@ -30,12 +30,12 @@ def run_convert() -> None:
 
 
 def run_dml() -> None:
-    from .pipeline import build_spark_session, replay_bronze_dml, stop_safely
+    from .pipeline import build_spark_session, replay_bronze_customer_dml, stop_safely
 
     settings = get_settings()
     spark = build_spark_session(settings)
     try:
-        operations = replay_bronze_dml(spark, settings)
+        operations = replay_bronze_customer_dml(spark, settings)
         print(f"Operações aplicadas na camada bronze: {operations}")
     finally:
         stop_safely(spark)

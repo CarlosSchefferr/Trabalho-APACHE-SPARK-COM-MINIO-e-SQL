@@ -29,7 +29,7 @@ def build_spark_session(settings: Settings):
         .config("spark.hadoop.fs.s3a.secret.key", settings.minio_secret_key)
         .config("spark.hadoop.fs.s3a.path.style.access", "true")
         .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
-        .config("spark.hadoop.fs.s3a.connection.ssl.enabled", str(settings.minio_endpoint.startswith("https")).lower())
+        .config("spark.hadoop.fs.s3a.connection.ssl.enabled", settings.minio_endpoint.startswith("https"))
     )
     return configure_spark_with_delta_pip(builder).getOrCreate()
 
@@ -115,8 +115,8 @@ def convert_landing_to_delta(spark, settings: Settings) -> list[str]:
     return converted_tables
 
 
-def replay_bronze_dml(spark, settings: Settings, table_name: str = "customers") -> dict[str, str]:
-    bronze_path = f"s3a://{settings.bronze_bucket}/{table_name}"
+def replay_bronze_customer_dml(spark, settings: Settings) -> dict[str, str]:
+    bronze_path = f"s3a://{settings.bronze_bucket}/customers"
     schema = "id INT, name STRING, city STRING, status STRING"
     delta_table = DeltaTable.forPath(spark, bronze_path)
 

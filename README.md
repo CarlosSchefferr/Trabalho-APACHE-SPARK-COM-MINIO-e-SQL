@@ -3,7 +3,7 @@
 Este repositório implementa o **Trabalho 2** como um projeto independente do trabalho 1.
 A solução utiliza um **banco relacional PostgreSQL**, exporta **todas as tabelas** para o bucket
 `landing-zone` em **CSV**, converte os arquivos para **Delta Lake** no bucket `bronze` e, por fim,
-reproduz operações de **insert**, **update** e **delete** em uma tabela Delta.
+reproduz operações de **insert**, **update** e **delete** na tabela Delta `customers`.
 
 ## Arquitetura
 
