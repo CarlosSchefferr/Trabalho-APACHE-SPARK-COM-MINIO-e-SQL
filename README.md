@@ -57,13 +57,12 @@ PostgreSQL -> MinIO landing-zone (CSV) -> MinIO bronze (Delta Lake) -> DML na ca
 1. Copie as variáveis de ambiente:
 
    ```bash
-   cp /home/runner/work/Trabalho-APACHE-SPARK-COM-MINIO-e-SQL/Trabalho-APACHE-SPARK-COM-MINIO-e-SQL/.env.example /home/runner/work/Trabalho-APACHE-SPARK-COM-MINIO-e-SQL/Trabalho-APACHE-SPARK-COM-MINIO-e-SQL/.env
+   cp .env.example .env
    ```
 
 2. Suba PostgreSQL + MinIO + criação dos buckets:
 
    ```bash
-   cd /home/runner/work/Trabalho-APACHE-SPARK-COM-MINIO-e-SQL/Trabalho-APACHE-SPARK-COM-MINIO-e-SQL
    docker compose up -d
    ```
 
